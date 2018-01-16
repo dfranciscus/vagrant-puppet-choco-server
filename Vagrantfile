@@ -4,6 +4,7 @@
 Vagrant.configure("2") do |config|
   config.vm.define "puppet" do |puppet|
     puppet.vm.box = "bento/centos-7.2"
+    puppet.vbguest.auto_update = false
     puppet.vm.network "private_network", ip: "192.168.10.21"
     puppet.vm.hostname = "puppet"
     puppet.vm.provider :virtualbox do |vb|
@@ -65,11 +66,14 @@ Vagrant.configure("2") do |config|
        Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
        Set-TimeZone 'Eastern Standard Time' 
        choco install puppet-agent -y -installArgs '"PUPPET_AGENT_STARTUP_MODE=Disabled"'
-       Add-Content -Value '192.168.0.21 puppet' -Path 'C:\windows\System32\drivers\etc\hosts'
+       Add-Content -Value '192.168.0.21 puppet' -Path 'C:\\windows\\System32\\drivers\\etc\\hosts'
        refreshenv
        puppet agent --test
     SHELL
   end
+
+
+
 end
 
 
