@@ -64,6 +64,7 @@ Vagrant.configure("2") do |config|
        Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
        choco install puppet-agent -y -installArgs '"PUPPET_AGENT_STARTUP_MODE=Disabled"'
        #Add host file entry for puppet master
+       #Other
 
        refreshenv
     SHELL
