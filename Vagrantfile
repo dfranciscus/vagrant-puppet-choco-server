@@ -13,6 +13,7 @@ Vagrant.configure("2") do |config|
     puppet.vm.provision "shell", inline: <<-SHELL
       sudo echo "192.168.10.22 puppetagent-1" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.23 puppetagent-2" | sudo tee -a /etc/hosts
+      sudo echo "192.168.10.24 puppetagent-win" | sudo tee -a /etc/hosts
       sudo systemctl enable firewalld
       sudo systemctl start firewalld
       sudo firewall-cmd --permanent --zone=public --add-port=8140/tcp 
@@ -29,7 +30,7 @@ Vagrant.configure("2") do |config|
       sudo systemctl start puppetserver           
     SHELL
   end
-
+=begin
   config.vm.define "puppetagent-1" do |puppetagent1|
     puppetagent1.vm.box = "bento/centos-7.2"
     puppetagent1.vm.network "private_network", ip: "192.168.10.22"
@@ -55,18 +56,18 @@ Vagrant.configure("2") do |config|
        sudo /opt/puppetlabs/bin/puppet agent --test
     SHELL
   end
-
+=end
   config.vm.define "puppetagentwin" do |puppetagentwin|
      puppetagentwin.vm.box = "eratiner/w2016x64vmX"
       puppetagentwin.vm.network "private_network", ip: "192.168.10.24"
-      puppetagentwin.vm.hostname = "puppetagentwin"
+      puppetagentwin.vm.hostname = "puppetagent-win"
       puppetagentwin.vm.provision "shell", inline: <<-SHELL
        Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+       Set-TimeZone 'Eastern Standard Time' 
        choco install puppet-agent -y -installArgs '"PUPPET_AGENT_STARTUP_MODE=Disabled"'
-       #Add host file entry for puppet master
-       #Other
-
+       Add-Content -Value '192.168.0.21 puppet' -Path 'C:\windows\System32\drivers\etc\hosts'
        refreshenv
+       puppet agent --test
     SHELL
   end
 end
