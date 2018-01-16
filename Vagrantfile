@@ -62,7 +62,9 @@ Vagrant.configure("2") do |config|
       puppetagentwin.vm.hostname = "puppetagentwin"
       puppetagentwin.vm.provision "shell", inline: <<-SHELL
        Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-       choco install puppet -y -installArgs '"PUPPET_AGENT_STARTUP_MODE=Disabled"'
+       choco install puppet-agent -y -installArgs '"PUPPET_AGENT_STARTUP_MODE=Disabled"'
+       #Add host file entry for puppet master
+
        refreshenv
     SHELL
   end
