@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--memory", "4096"]
       vb.customize ["modifyvm", :id, "--cpus", "2"]
     end
-    puppet.vm.provision "file", source: "~/GitHub/vagrant-puppet-choco-server/site.pp", destination: "/etc/puppetlabs/code/environments/production/manifests/site.pp"
+  
     puppet.vm.provision "shell", inline: <<-SHELL
       sudo echo "192.168.10.22 puppetagent-1" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.23 puppetagent-2" | sudo tee -a /etc/hosts
@@ -34,6 +34,7 @@ Vagrant.configure("2") do |config|
       sudo /opt/puppetlabs/bin/puppet module install puppet-windows_firewall --version 2.0.0    
       sudo /opt/puppetlabs/bin/puppet module install puppetlabs-dsc --version 1.4.1 
     SHELL
+    puppet.vm.provision "file", source: "~/GitHub/vagrant-puppet-choco-server/site.pp", destination: "/etc/puppetlabs/code/environments/production/manifests/site.pp"
   end
 =begin
   config.vm.define "puppetagent-1" do |puppetagent1|
