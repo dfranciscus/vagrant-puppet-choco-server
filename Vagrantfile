@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
     puppet.vm.box = "bento/centos-7.2"
     puppet.vbguest.auto_update = false
     puppet.vm.network "private_network", ip: "192.168.10.21"
-    puppet.vm.hostname = "puppet"
+    puppet.vm.hostname = "puppet-test"
     puppet.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm", :id, "--memory", "4096"]
       vb.customize ["modifyvm", :id, "--cpus", "2"]
@@ -42,7 +42,7 @@ end
     puppetagent1.vm.network "private_network", ip: "192.168.10.22"
     puppetagent1.vm.hostname = "puppetagent-1"
     puppetagent1.vm.provision "shell", inline: <<-SHELL
-       sudo echo "192.168.10.21 puppet" | sudo tee -a /etc/hosts
+       sudo echo "192.168.10.21 puppet-test" | sudo tee -a /etc/hosts
        sudo timedatectl set-timezone America/New_York
        sudo rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
        sudo yum -y install puppet-agent
@@ -55,7 +55,7 @@ end
       puppetagent2.vm.network "private_network", ip: "192.168.10.23"
       puppetagent2.vm.hostname = "puppetagent-2"
       puppetagent2.vm.provision "shell", inline: <<-SHELL
-       sudo echo "192.168.10.21 puppet" | sudo tee -a /etc/hosts
+       sudo echo "192.168.10.21 puppet-test" | sudo tee -a /etc/hosts
        sudo timedatectl set-timezone America/New_York
        sudo rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
        sudo yum -y install puppet-agent
@@ -70,8 +70,8 @@ end
       puppetagentwin.vm.provision "shell", inline: <<-SHELL
        Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
        Set-TimeZone 'Eastern Standard Time' 
-       choco install puppet-agent -y -installArgs '"PUPPET_AGENT_STARTUP_MODE=Disabled"'
-       Add-Content -Value '192.168.0.21 puppet' -Path 'C:\\windows\\System32\\drivers\\etc\\hosts'
+       choco install puppet-agent -y -installArgs '"PUPPET_AGENT_STARTUP_MODE=Disabled" "PUPPET_MASTER_SERVER=puppet-test"'
+       Add-Content -Value '192.168.0.21 puppet-test' -Path 'C:\\windows\\System32\\drivers\\etc\\hosts'
        refreshenv
        puppet agent --test --certname puppetagent-win
     SHELL
