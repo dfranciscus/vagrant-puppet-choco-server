@@ -12,6 +12,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--cpus", "2"]
     end
     puppet.vm.provision "file", source: "~/GitHub/vagrant-puppet-choco-server/site.pp", destination: "/vagrant/site.pp"
+    puppet.vm.provision "file", source: "~/GitHub/vagrant-puppet-choco-server/puppet.conf", destination: "/etc/puppetlabs/puppet/puppet.conf"
     puppet.vm.provision "shell", inline: <<-SHELL
       sudo echo "192.168.10.22 puppetagent-1" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.23 puppetagent-2" | sudo tee -a /etc/hosts
@@ -30,10 +31,12 @@ Vagrant.configure("2") do |config|
       sudo firewall-cmd --reload
       sudo systemctl enable puppetserver
       sudo cp /vagrant/site.pp /etc/puppetlabs/code/environments/production/manifests
+      sudo cp /vagrant/puppet.conf /etc/puppetlabs/puppet
       sudo systemctl start puppetserver    
       sudo /opt/puppetlabs/bin/puppet module install chocolatey-chocolatey_server  
       sudo /opt/puppetlabs/bin/puppet module install puppet-windows_firewall --version 2.0.0    
       sudo /opt/puppetlabs/bin/puppet module install puppetlabs-dsc --version 1.4.1 
+      sudo /opt/puppetlabs/bin/puppet module install chocolatey-chocolatey
     SHELL
 end
 =begin
@@ -71,10 +74,13 @@ end
        Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
        Set-TimeZone 'Eastern Standard Time' 
        choco install puppet-agent -y -installArgs '"PUPPET_AGENT_STARTUP_MODE=Disabled" "PUPPET_MASTER_SERVER=puppet-test"'
-       Add-Content -Value '192.168.0.21 puppet-test' -Path 'C:\\windows\\System32\\drivers\\etc\\hosts'
+       Add-Content -Value '192.168.10.21 puppet-test' -Path 'C:\\windows\\System32\\drivers\\etc\\hosts'
        refreshenv
+       SHELL
+      puppetagentwin.vm.provision "shell", inline: <<-SHELL
        puppet agent --test --certname puppetagent-win
-    SHELL
+       SHELL
+
   end
 
 
