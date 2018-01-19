@@ -1,4 +1,4 @@
-class my_chocoserver {
+class mychocoserver {
   include chocolatey_server
 
     windows_firewall::exception { 'Choco server':
@@ -42,6 +42,5 @@ class my_chocoserver {
   #class {'itg_ssl_wildcard':
   #    require => Class["chocolatey_server"],
   #  }
-
-  }
+  
 }
