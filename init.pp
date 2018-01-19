@@ -1,4 +1,4 @@
-class mychocoserver {
+class chocoserver {
   include chocolatey_server
 
     windows_firewall::exception { 'Choco server':
