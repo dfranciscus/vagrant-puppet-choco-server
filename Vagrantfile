@@ -12,7 +12,8 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--cpus", "2"]
     end
     puppet.vm.provision "file", source: "~/GitHub/vagrant-puppet-choco-server/site.pp", destination: "/vagrant/site.pp"
-    puppet.vm.provision "file", source: "~/GitHub/vagrant-puppet-choco-server/puppet.conf", destination: "/etc/puppetlabs/puppet/puppet.conf"
+    puppet.vm.provision "file", source: "~/GitHub/vagrant-puppet-choco-server/puppet.conf", destination: "/vagrant/puppet.conf"
+    puppet.vm.provision "file", source: "~/GitHub/vagrant-puppet-choco-server/init.pp", destination: "/vagrant/init.pp"
     puppet.vm.provision "shell", inline: <<-SHELL
       sudo echo "192.168.10.22 puppetagent-1" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.23 puppetagent-2" | sudo tee -a /etc/hosts
@@ -37,6 +38,10 @@ Vagrant.configure("2") do |config|
       sudo /opt/puppetlabs/bin/puppet module install puppet-windows_firewall --version 2.0.0    
       sudo /opt/puppetlabs/bin/puppet module install puppetlabs-dsc --version 1.4.1 
       sudo /opt/puppetlabs/bin/puppet module install chocolatey-chocolatey
+      sudo /opt/puppetlabs/bin/puppet module generate --skip-interview my-chocoserver
+      sudo cp /vagrant/init.pp /etc/puppetlabs/code/environments/production/modules/my_choco/manifests
+
+
     SHELL
 end
 =begin
