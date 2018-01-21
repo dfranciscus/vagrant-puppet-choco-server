@@ -7,10 +7,10 @@ class chocoserver {
     action       => 'Allow',
     enabled      => 'yes',
     protocol     => 'TCP',
-    local_port   => '8080',
+    local_port   => '80',
     remote_port  => 'any',
     display_name => 'Chocolatey Simple Server',
-    description  => 'Inbound rule for Chocolatey Server. [TCP 8080]',
+    description  => 'Inbound rule for Chocolatey Server. [TCP 80]',
   }
 
   windowsfeature { 'Web-Basic-Auth':
