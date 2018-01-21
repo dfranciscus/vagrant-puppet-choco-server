@@ -77,7 +77,7 @@ end
       puppetagentwin.vm.provision "shell", inline: <<-SHELL
        Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
        Set-TimeZone 'Eastern Standard Time' 
-       choco install puppet-agent -y -installArgs '"PUPPET_AGENT_STARTUP_MODE=Disabled" "PUPPET_MASTER_SERVER=puppet-test"'
+       choco install puppet -y -installArgs '"PUPPET_AGENT_STARTUP_MODE=Disabled" "PUPPET_MASTER_SERVER=puppet-test"'
        Add-Content -Value '192.168.10.21 puppet-test' -Path 'C:\\windows\\System32\\drivers\\etc\\hosts'
        refreshenv
        SHELL
