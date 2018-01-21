@@ -81,14 +81,10 @@ end
        Add-Content -Value '192.168.10.21 puppet-test' -Path 'C:\\windows\\System32\\drivers\\etc\\hosts'
        refreshenv
        SHELL
-      puppetagentwin.vm.provision "shell", inline: <<-SHELL
-       puppet agent --test --certname puppetagent-win
-       SHELL
-
+      #puppetagentwin.vm.provision "shell", inline: <<-SHELL
+      # puppet agent --test --certname puppetagent-win
+      # SHELL
   end
-
-
-
 end
 
 
